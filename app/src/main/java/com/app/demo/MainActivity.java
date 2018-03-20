@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkPermission() {
-        String[] permissions = new String[]{Manifest.permission.CAMERA};
+        final String[] permissions = new String[]{Manifest.permission.CAMERA};
         CheckPermissionActivity.startActivity(MainActivity.this, permissions, new CheckPermissionActivity.PermissionListener() {
             @Override
             public void onPermissionGranted() {
@@ -36,8 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                //权限被拒绝,可提示用户去权限设置中打开权限
+                //权限被拒绝
                 Log.d(TAG, "onPermissionDenied");
+                //https://developer.android.com/training/permissions/requesting.html?hl=zh-cn
+                //true则说明,申请了权限，但被用户拒绝,可在此处解释应用为何需要此权限
+                //false则说明用户拒绝并勾选了下次不再询问
+                boolean b = ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permissions[0]);
+                Log.d(TAG, "shouldShowRequestPermissionRationale=" + b);
             }
         });
     }
